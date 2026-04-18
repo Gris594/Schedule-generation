@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario Universitario UCC</title>
+    <meta name="description" content="Creador de horarios para la Universidad Castro Carazo (UCC) Costa Rica.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" rx="20" fill="url(#paint0_linear)" />
+                <path d="M72 35H64V65H72C77.5228 65 82 60.5228 82 55V45C82 39.4772 77.5228 35 72 35Z" fill="white" />
+                <path
+                    d="M45 65V35C45 35 30 35 25 35C22.2386 35 20 37.2386 20 40V60C20 62.7614 22.2386 65 25 65C28.2 65 45 65 45 65Z"
+                    fill="white" />
+                <path
+                    d="M37 65V35C37 35 45 35 50 35C52.7614 35 55 37.2386 55 40V60C55 62.7614 52.7614 65 50 65C45 65 37 65 37 65Z"
+                    fill="white" />
+                <defs>
+                    <linearGradient id="paint0_linear" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#0056b3" />
+                        <stop offset="1" stop-color="#0099ff" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="logo-text">
+                <h1>UCC</h1>
+                <span>Costa Rica</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <!-- Optional buttons like clear all or export -->
+            <button id="clearBtn" class="btn btn-outline">Limpiar Horario</button>
+            <button id="printBtn" class="btn btn-primary">Imprimir PDF</button>
+        </div>
+    </header>
+
+    <main class="app-wrapper">
+        <aside class="sidebar">
+            <div class="card">
+                <h2>Nueva Clase</h2>
+                <form id="classForm">
+                    <div class="form-group">
+                        <label for="subject">Materia</label>
+                        <input type="text" id="subject" placeholder="Ej. Análisis de Sistemas" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="professor">Profesor / Aula</label>
+                        <input type="text" id="professor" placeholder="Ej. Prof. Gomez, Aula 201">
+                    </div>
+                    <div class="form-group">
+                        <label for="day">Día</label>
+                        <select id="day" required>
+                            <option value="" disabled selected>Seleccione un día</option>
+                            <option value="monday">Lunes</option>
+                            <option value="tuesday">Martes</option>
+                            <option value="wednesday">Miércoles</option>
+                            <option value="thursday">Jueves</option>
+                            <option value="friday">Viernes</option>
+                            <option value="saturday">Sábado</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startTime">Inicio</label>
+                            <input type="time" id="startTime" min="07:00" max="22:00" value="08:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime">Fin</label>
+                            <input type="time" id="endTime" min="07:00" max="22:00" value="10:00" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-picker" id="colorPicker">
+                            <button type="button" class="color-btn active" data-color="#2563eb"
+                                style="background-color: #2563eb;"></button>
+                            <button type="button" class="color-btn" data-color="#0284c7"
+                                style="background-color: #0284c7;"></button>
+                            <button type="button" class="color-btn" data-color="#059669"
+                                style="background-color: #059669;"></button>
+                            <button type="button" class="color-btn" data-color="#ca8a04"
+                                style="background-color: #ca8a04;"></button>
+                            <button type="button" class="color-btn" data-color="#dc2626"
+                                style="background-color: #dc2626;"></button>
+                            <button type="button" class="color-btn" data-color="#9333ea"
+                                style="background-color: #9333ea;"></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Agregar Clase</button>
+                    <p id="formError" class="error-msg"></p>
+                </form>
+            </div>
+
+            <div class="card classes-list-card">
+                <h2>Mis Clases</h2>
+                <ul id="classesList" class="classes-list">
+                    <!-- Classes will be listed here -->
+                </ul>
+            </div>
+        </aside>
+
+        <section class="timetable-container card">
+            <div class="timetable-header">
+                <div class="time-corner">Hora</div>
+                <div class="day-header">Lunes</div>
+                <div class="day-header">Martes</div>
+                <div class="day-header">Miércoles</div>
+                <div class="day-header">Jueves</div>
+                <div class="day-header">Viernes</div>
+                <div class="day-header">Sábado</div>
+            </div>
+            <div class="timetable-body">
+                <div class="time-column" id="timeLabels">
+                    <!-- Time labels generated by JS -->
+                </div>
+                <div class="timetable-grid">
+                    <!-- Grid background lines generated by JS -->
+                    <div class="grid-lines" id="gridLines"></div>
+
+                    <div class="days-container" id="daysContainer">
+                        <div class="day-column" data-day="monday"></div>
+                        <div class="day-column" data-day="tuesday"></div>
+                        <div class="day-column" data-day="wednesday"></div>
+                        <div class="day-column" data-day="thursday"></div>
+                        <div class="day-column" data-day="friday"></div>
+                        <div class="day-column" data-day="saturday"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
